@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+        <h1>Lista de Usuarios</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody id="users-table-body">
+                <!-- Los datos de los usuarios se insertarán aquí -->
+            </tbody>
+        </table>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // URL de la API
+                const apiUrl = 'http://localhost:3000/api/users';
+    
+                // Función para obtener los usuarios de la API
+                async function fetchUsers() {
+                    try {
+                        const response = await fetch(apiUrl);
+                        const users = await response.json();
+                        populateTable(users);
+                    } catch (error) {
+                        console.error('Error al obtener los usuarios:', error);
+                    }
+                }
+    
+                // Función para llenar la tabla con los usuarios
+                function populateTable(users) {
+                    const tableBody = document.getElementById('users-table-body');
+                    tableBody.innerHTML = ''; // Limpiar cualquier contenido previo
+                    users.forEach(user => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${user.id}</td>
+                            <td>${user.name}</td>
+                            <td>${user.email}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                }
+    
+                // Llamar a la función para obtener los usuarios al cargar la página
+                fetchUsers();
+            });
+        </script>
+</body>
+</html>
